@@ -32,6 +32,8 @@ module.exports = {
 function getChannel () {
   if (appMetadata.version.match(/dev/)) {
     return 'dev'
+  } else if (appMetadata.version.match(/alpha/)) {
+    return 'alpha'
   } else if (appMetadata.version.match(/beta/)) {
     return 'beta'
   } else {
