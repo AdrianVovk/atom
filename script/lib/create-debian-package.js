@@ -10,9 +10,9 @@ const CONFIG = require('../config')
 
 module.exports = function (packagedAppPath) {
   console.log(`Creating Debian package for "${packagedAppPath}"`)
-  const atomExecutableName = CONFIG.channel === 'beta' ? 'atom-beta' : 'atom'
+  const atomExecutableName = CONFIG.channel === 'beta' ? 'substance-ide-beta' : 'substance-ide'
   const apmExecutableName = CONFIG.channel === 'beta' ? 'apm-beta' : 'apm'
-  const appName = CONFIG.channel === 'beta' ? 'Atom Beta' : 'Atom'
+  const appName = CONFIG.channel === 'beta' ? 'Substance IDE Beta' : 'Substance IDE'
   const appDescription = CONFIG.appMetadata.description
   const appVersion = CONFIG.appMetadata.version
   let arch
@@ -26,7 +26,7 @@ module.exports = function (packagedAppPath) {
     arch = process.arch
   }
 
-  const outputDebianPackageFilePath = path.join(CONFIG.buildOutputPath, `atom-${arch}.deb`)
+  const outputDebianPackageFilePath = path.join(CONFIG.buildOutputPath, `substance-ide-${arch}.deb`)
   const debianPackageDirPath = path.join(os.tmpdir(), path.basename(packagedAppPath))
   const debianPackageConfigPath = path.join(debianPackageDirPath, 'DEBIAN')
   const debianPackageInstallDirPath = path.join(debianPackageDirPath, 'usr')
@@ -67,7 +67,7 @@ module.exports = function (packagedAppPath) {
   fs.chmodSync(debianPackageAtomDirPath, '755')
 
   console.log(`Copying binaries into "${debianPackageBinDirPath}"`)
-  fs.copySync(path.join(CONFIG.repositoryRootPath, 'atom.sh'), path.join(debianPackageBinDirPath, atomExecutableName))
+  fs.copySync(path.join(CONFIG.repositoryRootPath, 'substance-ide.sh'), path.join(debianPackageBinDirPath, atomExecutableName))
   fs.symlinkSync(
     path.join('..', 'share', atomExecutableName, 'resources', 'app', 'apm', 'node_modules', '.bin', 'apm'),
     path.join(debianPackageBinDirPath, apmExecutableName)

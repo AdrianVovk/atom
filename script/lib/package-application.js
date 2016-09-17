@@ -66,7 +66,7 @@ function copyNonASARResources (packagedAppPath, bundledResourcesPath) {
     // Existing symlinks on user systems point to an outdated path, so just symlink it to the real location of the apm binary.
     // TODO: Change command installer to point to appropriate path and remove this fallback after a few releases.
     fs.symlinkSync(path.join('..', '..', 'bin', 'apm'), path.join(bundledResourcesPath, 'app', 'apm', 'node_modules', '.bin', 'apm'))
-    fs.copySync(path.join(CONFIG.repositoryRootPath, 'atom.sh'), path.join(bundledResourcesPath, 'app', 'atom.sh'))
+    fs.copySync(path.join(CONFIG.repositoryRootPath, 'substance-ide.sh'), path.join(bundledResourcesPath, 'app', 'substance-ide.sh'))
   }
   if (process.platform === 'darwin') {
     fs.copySync(path.join(CONFIG.repositoryRootPath, 'resources', 'mac', 'file.icns'), path.join(bundledResourcesPath, 'file.icns'))
@@ -112,9 +112,9 @@ function buildAsarUnpackGlobExpression () {
 
 function getAppName () {
   if (process.platform === 'darwin') {
-    return CONFIG.channel === 'beta' ? 'Atom Beta' : 'Atom'
+    return CONFIG.channel === 'beta' ? 'Substance IDE Beta' : 'Substance IDE'
   } else {
-    return 'atom'
+    return 'substance-ide'
   }
 }
 
