@@ -96,11 +96,10 @@ class AtomApplication
     @launch(options)
 
   destroy: ->
-    @disposable.dispose()
     windowsClosePromises = @windows.map (window) ->
       window.close()
       window.closedPromise
-    Promise.all(windowsClosePromises)
+    Promise.all(windowsClosePromises).then(=> @disposable.dispose())
 
   launch: (options) ->
     if options.pathsToOpen?.length > 0 or options.urlsToOpen?.length > 0 or options.test
@@ -109,6 +108,8 @@ class AtomApplication
       @loadState(options) or @openPath(options)
 
   openWithOptions: ({initialPaths, pathsToOpen, executedFrom, urlsToOpen, test, pidToKillWhenClosed, devMode, safeMode, newWindow, logFile, profileStartup, timeout, clearWindowState, addToLastWindow, env}) ->
+    app.focus()
+
     if test
       @runTests({headless: true, devMode, @resourcePath, executedFrom, pathsToOpen, logFile, timeout, env})
     else if pathsToOpen.length > 0
@@ -121,12 +122,12 @@ class AtomApplication
 
   # Public: Removes the {AtomWindow} from the global window list.
   removeWindow: (window) ->
-    if @windows.length is 1
+    @windows.splice(@windows.indexOf(window), 1)
+    if @windows.length is 0
       @applicationMenu?.enableWindowSpecificItems(false)
       if process.platform in ['win32', 'linux']
         app.quit()
         return
-    @windows.splice(@windows.indexOf(window), 1)
     @saveState(true) unless window.isSpec
 
   # Public: Adds the {AtomWindow} to the global window list.
@@ -198,7 +199,7 @@ class AtomApplication
       atomWindow ?= @focusedWindow()
       atomWindow?.browserWindow.inspectElement(x, y)
 
-    @on 'application:open-documentation', -> shell.openExternal('https://flight-manual.atom.io/')
+    @on 'application:open-documentation', -> shell.openExternal('http://flight-manual.atom.io/')
     @on 'application:open-discussions', -> shell.openExternal('https://discuss.atom.io')
     @on 'application:open-faq', -> shell.openExternal('https://atom.io/faq')
     @on 'application:open-terms-of-use', -> shell.openExternal('https://atom.io/terms')
@@ -231,8 +232,11 @@ class AtomApplication
     @openPathOnEvent('application:open-your-stylesheet', 'atom://.atom/stylesheet')
     @openPathOnEvent('application:open-license', path.join(process.resourcesPath, 'LICENSE.md'))
 
-    @disposable.add ipcHelpers.on app, 'before-quit', =>
-      @quitting = true
+    @disposable.add ipcHelpers.on app, 'before-quit', (event) =>
+      unless @quitting
+        event.preventDefault()
+        @quitting = true
+        Promise.all(@windows.map((window) -> window.saveState())).then(-> app.quit())
 
     @disposable.add ipcHelpers.on app, 'will-quit', =>
       @killAllProcesses()
@@ -320,6 +324,8 @@ class AtomApplication
 
     @disposable.add ipcHelpers.on ipcMain, 'did-cancel-window-unload', =>
       @quitting = false
+      for window in @windows
+        window.didCancelWindowUnload()
 
     clipboard = require '../safe-clipboard'
     @disposable.add ipcHelpers.on ipcMain, 'write-text-to-selection-clipboard', (event, selectedText) ->
