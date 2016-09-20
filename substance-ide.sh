@@ -9,13 +9,11 @@ else
   exit 1
 fi
 
-if [ "$(basename $0)" == 'atom-beta' ]; then
+if [ "$(basename $0)" == 'substance-ide-beta' ]; then
   BETA_VERSION=true
 else
   BETA_VERSION=
 fi
-
-export ATOM_DISABLE_SHELLING_OUT_FOR_ENVIRONMENT=true
 
 while getopts ":wtfvh-:" opt; do
   case "$opt" in
@@ -56,11 +54,11 @@ fi
 
 if [ $OS == 'Mac' ]; then
   if [ -n "$BETA_VERSION" ]; then
-    ATOM_APP_NAME="Atom Beta.app"
-    ATOM_EXECUTABLE_NAME="Atom Beta"
+    ATOM_APP_NAME="Substance IDE Beta.app"
+    ATOM_EXECUTABLE_NAME="Substance IDE Beta"
   else
-    ATOM_APP_NAME="Atom.app"
-    ATOM_EXECUTABLE_NAME="Atom"
+    ATOM_APP_NAME="Substance IDE.app"
+    ATOM_EXECUTABLE_NAME="Substance IDE"
   fi
 
   if [ -z "${ATOM_PATH}" ]; then
@@ -92,17 +90,18 @@ elif [ $OS == 'Linux' ]; then
   USR_DIRECTORY=$(readlink -f $(dirname $SCRIPT)/..)
 
   if [ -n "$BETA_VERSION" ]; then
-    ATOM_PATH="$USR_DIRECTORY/share/atom-beta/atom"
+    ATOM_PATH="$USR_DIRECTORY/share/substance-ide-beta/substance-ide"
   else
-    ATOM_PATH="$USR_DIRECTORY/share/atom/atom"
+    ATOM_PATH="$USR_DIRECTORY/share/substance-ide/substance-ide"
   fi
 
-  ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
+  ATOM_HOME="${ATOM_HOME:-$HOME/.substance-ide}"
   mkdir -p "$ATOM_HOME"
 
   : ${TMPDIR:=/tmp}
 
-  [ -x "$ATOM_PATH" ] || ATOM_PATH="$TMPDIR/atom-build/Atom/atom"
+  # [ -x "$ATOM_PATH" ] || ATOM_PATH="$TMPDIR/atom-build/Atom/atom"
+  [ -x "$ATOM_PATH" ] || chmod +x "$ATOM_PATH"
 
   if [ $EXPECT_OUTPUT ]; then
     "$ATOM_PATH" --executed-from="$(pwd)" --pid=$$ "$@"
@@ -115,7 +114,7 @@ elif [ $OS == 'Linux' ]; then
       exit $?
     fi
     ) &
-  fi
+  fioprn
 fi
 
 # Exits this process when Atom is used as $EDITOR

@@ -74,16 +74,16 @@ dumpSymbols()
         console.log('Skipping creating installer. Specify the --create-windows-installer option to create a Squirrel-based Windows installer. Code-signing was skipped too.'.gray)
       }
     } else if (process.platform === 'linux') {
-      if (argv.createDebianPackage) {
+      if (argv.deb) {
         createDebianPackage(packagedAppPath)
       } else {
-        console.log('Skipping creating debian package. Specify the --create-debian-package option to create it.'.gray)
+        console.log('Skipping creating debian package. Specify the --deb option to create it.'.gray)
       }
 
-      if (argv.createRpmPackage) {
+      if (argv.rpm) {
         createRpmPackage(packagedAppPath)
       } else {
-        console.log('Skipping creating rpm package. Specify the --create-rpm-package option to create it.'.gray)
+        console.log('Skipping creating rpm package. Specify the --rpm option to create it.'.gray)
       }
     }
 

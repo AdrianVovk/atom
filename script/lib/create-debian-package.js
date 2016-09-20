@@ -83,7 +83,7 @@ module.exports = function (packagedAppPath) {
   fs.writeFileSync(path.join(debianPackageConfigPath, 'control'), controlFileContents)
 
   console.log(`Writing desktop entry file into "${debianPackageApplicationsDirPath}"`)
-  const desktopEntryTemplate = fs.readFileSync(path.join(CONFIG.repositoryRootPath, 'resources', 'linux', 'atom.desktop.in'))
+  const desktopEntryTemplate = fs.readFileSync(path.join(CONFIG.repositoryRootPath, 'resources', 'linux', 'substance-ide.desktop.in'))
   const desktopEntryContents = template(desktopEntryTemplate)({
     appName: appName, appFileName: atomExecutableName, description: appDescription,
     installDir: '/usr', iconPath: atomExecutableName
