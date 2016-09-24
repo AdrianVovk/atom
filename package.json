@@ -65,6 +65,7 @@
     "yargs": "^3.23.0"
   },
   "packageDependencies": {
+    "build-fusion":"0.0.2",
     "selly-ui-ide":"1.0.0",
     "toolbar-icons-ide":"1.0.1",
     "tree-view-autoresize":"1.2.0",
