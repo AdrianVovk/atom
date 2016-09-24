@@ -15,7 +15,7 @@ module.exports = function () {
   const appName = getAppName()
   console.log(`Running electron-packager on ${CONFIG.intermediateAppPath} with app name "${appName}"`)
   return runPackager({
-    'app-bundle-id': 'com.github.atom',
+    'app-bundle-id': 'substance.ide',
     'app-copyright': `Copyright © 2014-${(new Date()).getFullYear()} GitHub, Inc. All rights reserved.`,
     'app-version': CONFIG.appMetadata.version,
     'arch': process.platform === 'win32' ? 'ia32' : 'x64',

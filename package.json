@@ -1,7 +1,7 @@
 {
   "name": "substance-ide",
   "productName": "Substance IDE",
-  "version": "0.0.1-alpha",
+  "version": "1.10.0-alpha",
   "description": "An IDE with superior device support.",
   "main": "./src/main-process/main.js",
   "repository": {
@@ -65,6 +65,9 @@
     "yargs": "^3.23.0"
   },
   "packageDependencies": {
+    "build-fusion":"0.0.1",
+    "selly-ui-ide":"1.0.0",
+    "toolbar-icons-ide":"1.0.1",
     "atom-dark-syntax": "0.27.0",
     "atom-dark-ui": "0.52.0",
     "atom-light-syntax": "0.28.0",
