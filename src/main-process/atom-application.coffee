@@ -62,7 +62,7 @@ class AtomApplication
   exit: (status) -> app.exit(status)
 
   constructor: (options) ->
-    {@resourcePath, @devResourcePath, @version, @devMode, @safeMode, @socketPath, timeout, clearWindowState} = options
+    {@resourcePath, @devResourcePath, @version, @devMode, @safeMode, @socketPath, @logFile, @setPortable, @userDataDir, timeout, clearWindowState} = options
     @socketPath = null if options.test
     @pidsToOpenWindows = {}
     @windows = []
@@ -83,7 +83,7 @@ class AtomApplication
   initialize: (options) ->
     global.atomApplication = this
 
-    @config.onDidChange 'core.useCustomTitleBar', @promptForRelaunch
+    @config.onDidChange 'core.useCustomTitleBar', @promptForRestart.bind(this)
 
     @autoUpdateManager = new AutoUpdateManager(@version, options.test, @resourcePath, @config)
     @applicationMenu = new ApplicationMenu(@version, @autoUpdateManager)
@@ -250,13 +250,17 @@ class AtomApplication
       event.preventDefault()
       @openUrl({urlToOpen, @devMode, @safeMode})
 
-    @disposable.add ipcHelpers.on app, 'activate-with-no-open-windows', (event) =>
-      event?.preventDefault()
-      @emit('application:new-window')
+    @disposable.add ipcHelpers.on app, 'activate', (event, hasVisibleWindows) =>
+      unless hasVisibleWindows
+        event?.preventDefault()
+        @emit('application:new-window')
+
+    @disposable.add ipcHelpers.on ipcMain, 'restart-application', =>
+      @restart()
 
     # A request from the associated render process to open a new render process.
     @disposable.add ipcHelpers.on ipcMain, 'open', (event, options) =>
-      window = @windowForEvent(event)
+      window = @atomWindowForEvent(event)
       if options?
         if typeof options.pathsToOpen is 'string'
           options.pathsToOpen = [options.pathsToOpen]
@@ -290,9 +294,8 @@ class AtomApplication
       win = BrowserWindow.fromWebContents(event.sender)
       win.emit(command, args...)
 
-    @disposable.add ipcHelpers.on ipcMain, 'call-window-method', (event, method, args...) ->
-      win = BrowserWindow.fromWebContents(event.sender)
-      win[method](args...)
+    @disposable.add ipcHelpers.respondTo 'window-method', (browserWindow, method, args...) =>
+      @atomWindowForBrowserWindow(browserWindow)?[method](args...)
 
     @disposable.add ipcHelpers.on ipcMain, 'pick-folder', (event, responseChannel) =>
       @promptForPath "folder", (selectedPaths) ->
@@ -350,11 +353,11 @@ class AtomApplication
       event.returnValue = @autoUpdateManager.getErrorMessage()
 
     @disposable.add ipcHelpers.on ipcMain, 'will-save-path', (event, path) =>
-      @fileRecoveryService.willSavePath(@windowForEvent(event), path)
+      @fileRecoveryService.willSavePath(@atomWindowForEvent(event), path)
       event.returnValue = true
 
     @disposable.add ipcHelpers.on ipcMain, 'did-save-path', (event, path) =>
-      @fileRecoveryService.didSavePath(@windowForEvent(event), path)
+      @fileRecoveryService.didSavePath(@atomWindowForEvent(event), path)
       event.returnValue = true
 
   setupDockMenu: ->
@@ -425,9 +428,11 @@ class AtomApplication
       atomWindow.devMode is devMode and atomWindow.containsPaths(pathsToOpen)
 
   # Returns the {AtomWindow} for the given ipcMain event.
-  windowForEvent: ({sender}) ->
-    window = BrowserWindow.fromWebContents(sender)
-    _.find @windows, ({browserWindow}) -> window is browserWindow
+  atomWindowForEvent: ({sender}) ->
+    @atomWindowForBrowserWindow(BrowserWindow.fromWebContents(sender))
+
+  atomWindowForBrowserWindow: (browserWindow) ->
+    @windows.find((atomWindow) -> atomWindow.browserWindow is browserWindow)
 
   # Public: Returns the currently focused {AtomWindow} or undefined if none.
   focusedWindow: ->
@@ -731,13 +736,24 @@ class AtomApplication
 
     dialog.showOpenDialog(parentWindow, openOptions, callback)
 
-  promptForRelaunch: ->
+  promptForRestart: ->
     chosen = dialog.showMessageBox BrowserWindow.getFocusedWindow(),
       type: 'warning'
-      title: 'Relaunch required'
-      message: "You will need to relaunch Atom for this change to take effect."
-      buttons: ['Quit Atom', 'Cancel']
+      title: 'Restart required'
+      message: "You will need to restart Atom for this change to take effect."
+      buttons: ['Restart Atom', 'Cancel']
     if chosen is 0
-      # once we're using electron v.1.2.2
-      # app.relaunch()
-      app.quit()
+      @restart()
+
+  restart: ->
+    args = []
+    args.push("--safe") if @safeMode
+    args.push("--portable") if @setPortable
+    args.push("--log-file=#{@logFile}") if @logFile?
+    args.push("--socket-path=#{@socketPath}") if @socketPath?
+    args.push("--user-data-dir=#{@userDataDir}") if @userDataDir?
+    if @devMode
+      args.push('--dev')
+      args.push("--resource-path=#{@resourcePath}")
+    app.relaunch({args})
+    app.quit()

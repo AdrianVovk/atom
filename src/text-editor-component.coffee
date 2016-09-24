@@ -195,6 +195,10 @@ class TextEditorComponent
 
   becameVisible: ->
     @updatesPaused = true
+    # Always invalidate LinesYardstick measurements when the editor becomes
+    # visible again, because content might have been reflowed and measurements
+    # could be outdated.
+    @invalidateMeasurements()
     @measureScrollbars() if @measureScrollbarsWhenShown
     @sampleFontStyling()
     @sampleBackgroundColors()

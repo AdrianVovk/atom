@@ -120,6 +120,16 @@ describe "PackageManager", ->
         state: state2
       }
 
+    it "early-activates any atom.directory-provider or atom.repository-provider services that the package provide", ->
+      jasmine.useRealClock()
+
+      providers = []
+      atom.packages.serviceHub.consume 'atom.directory-provider', '^0.1.0', (provider) ->
+        providers.push(provider)
+
+      atom.packages.loadPackage('package-with-directory-provider')
+      expect(providers.map((p) -> p.name)).toEqual(['directory provider from package-with-directory-provider'])
+
     describe "when there are view providers specified in the package's package.json", ->
       model1 = {worksWithViewProvider1: true}
       model2 = {worksWithViewProvider2: true}
@@ -492,6 +502,7 @@ describe "PackageManager", ->
       runs ->
         expect(pack.mainModule.someNumber).not.toBe 77
         pack.mainModule.someNumber = 77
+        atom.packages.serializePackage("package-with-serialization")
         atom.packages.deactivatePackage("package-with-serialization")
         spyOn(pack.mainModule, 'activate').andCallThrough()
       waitsForPromise ->
@@ -888,6 +899,22 @@ describe "PackageManager", ->
         expect(atom.packages.packageStates['package-with-serialize-error']).toBeUndefined()
         expect(atom.packages.packageStates['package-with-serialization']).toEqual someNumber: 1
         expect(console.error).toHaveBeenCalled()
+
+  describe "::deactivatePackages()", ->
+    it "deactivates all packages but does not serialize them", ->
+      [pack1, pack2] = []
+
+      waitsForPromise ->
+        atom.packages.activatePackage("package-with-deactivate").then (p) -> pack1 = p
+        atom.packages.activatePackage("package-with-serialization").then (p) -> pack2 = p
+
+      runs ->
+        spyOn(pack1.mainModule, 'deactivate')
+        spyOn(pack2.mainModule, 'serialize')
+        atom.packages.deactivatePackages()
+
+        expect(pack1.mainModule.deactivate).toHaveBeenCalled()
+        expect(pack2.mainModule.serialize).not.toHaveBeenCalled()
 
   describe "::deactivatePackage(id)", ->
     afterEach ->
