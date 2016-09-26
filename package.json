@@ -67,7 +67,7 @@
   "packageDependencies": {
     "build-fusion":"0.0.3",
     "selly-ui-ide":"1.0.0",
-    "toolbar-ide":"1.0.0",
+    "toolbar-ide":"1.0.1",
     "toolbar-icons-ide":"1.0.2",
     "tree-view-autoresize":"1.2.0",
     "pigments":"0.35.0",
