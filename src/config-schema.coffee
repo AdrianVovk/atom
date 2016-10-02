@@ -9,7 +9,7 @@ module.exports =
     properties:
       ignoredNames:
         type: 'array'
-        default: [".git", ".hg", ".svn", ".DS_Store", "._*", "Thumbs.db"]
+        default: [".git", ".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", "node_modules", "ide_build"]
         items:
           type: 'string'
         description: 'List of string glob patterns. Files and directories matching these patterns will be ignored by some packages, such as the fuzzy finder and tree view. Individual packages might have additional config settings for ignoring names.'
@@ -38,13 +38,13 @@ module.exports =
             type: 'string'
       themes:
         type: 'array'
-        default: ['one-dark-ui', 'one-dark-syntax']
+        default: ['selly-ui-ide', 'selly-syntax-ide']
         items:
           type: 'string'
         description: 'Names of UI and syntax themes which will be used when Atom starts.'
       projectHome:
         type: 'string'
-        default: path.join(fs.getHomeDirectory(), 'github')
+        default: path.join(fs.getHomeDirectory(), 'SubstanceProjects')
         description: 'The directory where projects are assumed to be located. Packages created using the Package Generator will be stored here by default.'
       audioBeep:
         type: 'boolean'
@@ -162,7 +162,7 @@ module.exports =
         description: 'Render placeholders for invisible characters, such as tabs, spaces and newlines.'
       showIndentGuide:
         type: 'boolean'
-        default: false
+        default: true
         description: 'Show indentation indicators in the editor.'
       showLineNumbers:
         type: 'boolean'
@@ -224,7 +224,7 @@ module.exports =
         description: 'Determines how fast the editor scrolls when using a mouse or trackpad.'
       scrollPastEnd:
         type: 'boolean'
-        default: false
+        default: true
         description: 'Allow the editor to be scrolled past the end of the last line.'
       undoGroupingInterval:
         type: 'integer'
@@ -268,7 +268,7 @@ module.exports =
 if process.platform in ['win32', 'linux']
   module.exports.core.properties.autoHideMenuBar =
     type: 'boolean'
-    default: false
+    default: true
     description: 'Automatically hide the menu bar and toggle it by pressing Alt. This is only supported on Windows & Linux.'
 
 if process.platform is 'darwin'

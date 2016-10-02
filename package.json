@@ -1,7 +1,7 @@
 {
   "name": "substance-ide",
   "productName": "Substance IDE",
-  "version": "1.10.0-alpha",
+  "version": "1.10.1-alpha",
   "description": "An IDE with superior device support.",
   "main": "./src/main-process/main.js",
   "repository": {
@@ -66,13 +66,14 @@
   },
   "packageDependencies": {
     "build-fusion":"0.0.3",
-    "selly-ui-ide":"1.0.0",
-    "toolbar-ide":"1.0.1",
+    "selly-ui-ide":"1.0.1",
+    "selly-syntax-ide":"2.0.1",
+    "toolbar-ide":"1.1.0",
     "toolbar-icons-ide":"1.0.2",
     "tree-view-autoresize":"1.2.0",
     "pigments":"0.35.0",
     "language-kotlin-ide":"0.4.2",
-    "git-support-ide":"1.0.0",
+    "git-support-ide":"1.3.0",
     "minimap":"4.25.0",
     "minimap-find-and-replace":"4.5.1",
     "minimap-git-diff":"4.3.1",
