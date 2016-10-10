@@ -84,7 +84,7 @@ function setupAtomHome ({setPortable}) {
     return
   }
 
-  let atomHome = path.join(app.getPath('home'), '.atom')
+  let atomHome = path.join(app.getPath('home'), '.substance-ide')
   const AtomPortable = require('./atom-portable')
 
   if (setPortable && !AtomPortable.isPortableInstall(process.platform, process.env.ATOM_HOME, atomHome)) {
