@@ -12,7 +12,7 @@ const CONFIG = require('../config')
 module.exports = function (packagedAppPath, codeSign) {
   const options = {
     appDirectory: packagedAppPath,
-    authors: 'GitHub Inc.',
+    authors: 'Substance Mobile',
     iconUrl: `https://raw.githubusercontent.com/atom/atom/master/resources/app-icons/${CONFIG.channel}/atom.ico`,
     loadingGif: path.join(CONFIG.repositoryRootPath, 'resources', 'win', 'loading.gif'),
     outputDirectory: CONFIG.buildOutputPath,

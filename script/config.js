@@ -42,8 +42,8 @@ function getChannel () {
 }
 
 function getApmBinPath () {
-  const apmBinName = process.platform === 'win32' ? 'apm.cmd' : 'apm'
-  return path.join(apmRootPath, 'node_modules', 'atom-package-manager', 'bin', apmBinName)
+  const apmBinName = process.platform === 'win32' ? 'spm.cmd' : 'spm'
+  return path.join(apmRootPath, 'node_modules', 'substance-package-manager', 'bin', apmBinName)
 }
 
 function getNpmBinPath () {

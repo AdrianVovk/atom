@@ -1,11 +1,11 @@
 {
-  "name": "atom-bundled-apm",
-  "description": "Atom's bundled apm",
+  "name": "substance-bundled-spm",
+  "description": "Substance's bundled spm",
   "repository": {
     "type": "git",
-    "url": "https://github.com/atom/atom.git"
+    "url": "https://github.com/AdrianVovk/spm.git"
   },
   "dependencies": {
-    "atom-package-manager": "1.12.5"
+    "substance-package-manager": "1.12.5"
   }
 }
