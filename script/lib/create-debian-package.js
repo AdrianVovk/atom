@@ -11,7 +11,7 @@ const CONFIG = require('../config')
 module.exports = function (packagedAppPath) {
   console.log(`Creating Debian package for "${packagedAppPath}"`)
   const atomExecutableName = CONFIG.channel === 'beta' ? 'substance-ide-beta' : 'substance-ide'
-  const apmExecutableName = CONFIG.channel === 'beta' ? 'apm-beta' : 'apm'
+  const apmExecutableName = CONFIG.channel === 'beta' ? 'spm-beta' : 'spm'
   const appName = CONFIG.channel === 'beta' ? 'Substance IDE Beta' : 'Substance IDE'
   const appDescription = CONFIG.appMetadata.description
   const appVersion = CONFIG.appMetadata.version
@@ -69,7 +69,7 @@ module.exports = function (packagedAppPath) {
   console.log(`Copying binaries into "${debianPackageBinDirPath}"`)
   fs.copySync(path.join(CONFIG.repositoryRootPath, 'substance-ide.sh'), path.join(debianPackageBinDirPath, atomExecutableName))
   fs.symlinkSync(
-    path.join('..', 'share', atomExecutableName, 'resources', 'app', 'apm', 'node_modules', '.bin', 'apm'),
+    path.join('..', 'share', atomExecutableName, 'resources', 'app', 'spm', 'node_modules', '.bin', 'spm'),
     path.join(debianPackageBinDirPath, apmExecutableName)
   )
 

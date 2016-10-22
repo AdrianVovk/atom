@@ -6,7 +6,7 @@ const path = require('path')
 const CONFIG = require('../config')
 
 module.exports = function () {
-  console.log('Installing apm')
+  console.log('Installing spm')
   childProcess.execFileSync(
     CONFIG.getNpmBinPath(),
     ['--global-style', '--loglevel=error', 'install'],

@@ -36,7 +36,7 @@ module.exports = function (packagedAppPath) {
     }
   } else {
     const atomExecutableName = CONFIG.channel === 'beta' ? 'atom-beta' : 'atom'
-    const apmExecutableName = CONFIG.channel === 'beta' ? 'apm-beta' : 'apm'
+    const apmExecutableName = CONFIG.channel === 'beta' ? 'spm-beta' : 'spm'
     const appName = CONFIG.channel === 'beta' ? 'Atom Beta' : 'Atom'
     const appDescription = CONFIG.appMetadata.description
     const userLocalDirPath = path.join('/usr', 'local')

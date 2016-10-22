@@ -47,7 +47,7 @@ const EXCLUDE_REGEXPS_SOURCES = [
   escapeRegExp(path.join('build', 'Release', 'obj.target')),
   escapeRegExp(path.join('build', 'Release', 'obj')),
   escapeRegExp(path.join('build', 'Release', '.deps')),
-  escapeRegExp(path.join('vendor', 'apm')),
+  escapeRegExp(path.join('vendor', 'spm')),
 
   // These are only required in dev-mode, when pegjs grammars aren't precompiled
   escapeRegExp(path.join('node_modules', 'loophole')),

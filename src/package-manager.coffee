@@ -138,12 +138,12 @@ class PackageManager
     return configPath if configPath
     return @apmPath if @apmPath?
 
-    commandName = 'apm'
+    commandName = 'spm'
     commandName += '.cmd' if process.platform is 'win32'
-    apmRoot = path.join(process.resourcesPath, 'app', 'apm')
+    apmRoot = path.join(process.resourcesPath, 'app', 'spm')
     @apmPath = path.join(apmRoot, 'bin', commandName)
     unless fs.isFileSync(@apmPath)
-      @apmPath = path.join(apmRoot, 'node_modules', 'atom-package-manager', 'bin', commandName)
+      @apmPath = path.join(apmRoot, 'node_modules', 'substance-package-manager', 'bin', commandName)
     @apmPath
 
   # Public: Get the paths being used to look for packages.

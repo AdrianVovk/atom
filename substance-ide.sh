@@ -114,9 +114,8 @@ elif [ $OS == 'Linux' ]; then
       exit $?
     fi
     ) &
-  fioprn
+  fi
 fi
-
 # Exits this process when Atom is used as $EDITOR
 on_die() {
   exit 0

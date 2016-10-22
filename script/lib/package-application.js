@@ -58,22 +58,22 @@ module.exports = function () {
 function copyNonASARResources (packagedAppPath, bundledResourcesPath) {
   console.log(`Copying non-ASAR resources to ${bundledResourcesPath}`)
   fs.copySync(
-    path.join(CONFIG.repositoryRootPath, 'apm', 'node_modules', 'atom-package-manager'),
-    path.join(bundledResourcesPath, 'app', 'apm'),
+    path.join(CONFIG.repositoryRootPath, 'apm', 'node_modules', 'substance-package-manager'),
+    path.join(bundledResourcesPath, 'app', 'spm'),
     {filter: includePathInPackagedApp}
   )
   if (process.platform !== 'win32') {
     // Existing symlinks on user systems point to an outdated path, so just symlink it to the real location of the apm binary.
     // TODO: Change command installer to point to appropriate path and remove this fallback after a few releases.
-    fs.symlinkSync(path.join('..', '..', 'bin', 'apm'), path.join(bundledResourcesPath, 'app', 'apm', 'node_modules', '.bin', 'apm'))
+    fs.symlinkSync(path.join('..', '..', 'bin', 'spm'), path.join(bundledResourcesPath, 'app', 'spm', 'node_modules', '.bin', 'spm'))
     fs.copySync(path.join(CONFIG.repositoryRootPath, 'substance-ide.sh'), path.join(bundledResourcesPath, 'app', 'substance-ide.sh'))
   }
   if (process.platform === 'darwin') {
     fs.copySync(path.join(CONFIG.repositoryRootPath, 'resources', 'mac', 'file.icns'), path.join(bundledResourcesPath, 'file.icns'))
   } else if (process.platform === 'linux') {
-    fs.copySync(path.join(CONFIG.repositoryRootPath, 'resources', 'app-icons', CONFIG.channel, 'png', '1024.png'), path.join(packagedAppPath, 'atom.png'))
+    fs.copySync(path.join(CONFIG.repositoryRootPath, 'resources', 'app-icons', CONFIG.channel, 'png', '1024.png'), path.join(packagedAppPath, 'substance-ide.png'))
   } else if (process.platform === 'win32') {
-    [ 'atom.cmd', 'atom.sh', 'atom.js', 'apm.cmd', 'apm.sh', 'file.ico' ]
+    [ 'atom.cmd', 'atom.sh', 'atom.js', 'spm.cmd', 'spm.sh', 'file.ico' ]
       .forEach(file => fs.copySync(path.join('resources', 'win', file), path.join(bundledResourcesPath, 'cli', file)))
   }
 
@@ -121,13 +121,13 @@ function getAppName () {
 function getIcon () {
   switch (process.platform) {
     case 'darwin':
-      return path.join(CONFIG.repositoryRootPath, 'resources', 'app-icons', CONFIG.channel, 'atom.icns')
+      return path.join(CONFIG.repositoryRootPath, 'resources', 'app-icons', CONFIG.channel, 'substance-ide.icns')
     case 'linux':
       // Don't pass an icon, as the dock/window list icon is set via the icon
       // option in the BrowserWindow constructor in atom-window.coffee.
       return null
     default:
-      return path.join(CONFIG.repositoryRootPath, 'resources', 'app-icons', CONFIG.channel, 'atom.ico')
+      return path.join(CONFIG.repositoryRootPath, 'resources', 'app-icons', CONFIG.channel, 'substance-ide.ico')
   }
 }
 

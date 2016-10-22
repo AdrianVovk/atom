@@ -174,7 +174,7 @@ class Workspace extends Model
   # Updates the application's title and proxy icon based on whichever file is
   # open.
   updateWindowTitle: =>
-    appName = 'Atom'
+    appName = 'Substance IDE'
     projectPaths = @project.getPaths() ? []
     if item = @getActivePaneItem()
       itemPath = item.getPath?()
