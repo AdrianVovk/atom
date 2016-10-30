@@ -11,7 +11,7 @@ const configSchema = {
     properties: {
       ignoredNames: {
         type: 'array',
-        default: [".git", ".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", "node_modules", "ide_build"]
+        default: [".git", ".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", "node_modules", "ide_build"],
         items: {
           type: 'string'
         },
@@ -51,7 +51,7 @@ const configSchema = {
       },
       themes: {
         type: 'array',
-        default: ['selly-ui-ide', 'selly-syntax-ide']
+        default: ['selly-ui-ide', 'selly-syntax-ide'],
         items: {
           type: 'string'
         },
