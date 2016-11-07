@@ -1,0 +1,27 @@
+#!/bin/bash
+function test() {
+  spm view $1
+}
+
+test build-fusion
+test selly-ui-ide
+test selly-syntax-ide
+test toolbar-ide
+test toolbar-icons-ide
+test project-manager-ide
+test language-kotlin-ide
+test git-support-ide
+
+test tree-view-autoresize
+test pigments
+test minimap
+test minimap-find-and-replace
+test minimap-git-diff
+test minimap-cursorline
+test minimap-highlight-selected
+test minimap-selection
+test click-link
+test file-type-icons
+test git-time-machine
+test merge-conflicts
+test todo-show
