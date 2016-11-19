@@ -6,6 +6,6 @@
     "url": "https://github.com/AdrianVovk/spm.git"
   },
   "dependencies": {
-    "substance-package-manager": "1.14.0"
+    "substance-package-manager": "1.15.0"
   }
 }
