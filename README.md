@@ -33,15 +33,14 @@ Atom will automatically update when a new release is available.
 
 ### Windows
 
-Download the latest [AtomSetup.exe installer](https://github.com/atom/atom/releases/latest).
+Download the latest [Atom installer](https://github.com/atom/atom/releases/latest).  AtomSetup.exe is 32-bit, AtomSetup-x64.exe for 64-bit systems.
 
 Atom will automatically update when a new release is available.
 
-You can also download an `atom-windows.zip` file from the [releases page](https://github.com/atom/atom/releases/latest).
+You can also download `atom-windows.zip` (32-bit) or `atom-x64-windows.zip` (64-bit) from the [releases page](https://github.com/atom/atom/releases/latest).
 The `.zip` version will not automatically update.
 
-Using [chocolatey](https://chocolatey.org/)? Run `cinst Atom` to install
-the latest version of Atom.
+Using [chocolatey](https://chocolatey.org/)? Run `cinst Atom` to install the latest version of Atom.
 
 ### Debian Linux (Ubuntu)
 
@@ -97,3 +96,9 @@ repeat these steps to upgrade to future releases.
 * [macOS](./docs/build-instructions/macos.md)
 * [FreeBSD](./docs/build-instructions/freebsd.md)
 * [Windows](./docs/build-instructions/windows.md)
+
+## License
+
+[MIT](https://github.com/atom/atom/blob/master/LICENSE.md)
+
+When using the Atom or other GitHub logos, be sure to follow the [GitHub logo guidelines](https://github.com/logos).
