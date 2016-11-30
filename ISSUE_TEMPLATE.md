@@ -25,8 +25,8 @@ For more information on how to write a good [bug report](https://github.com/atom
 
 ### Versions 
 
-OS: [What operating system do you use?] 
-Architecture: [What is the device's architecture? (For example: x86, ARMv8, amd64, etc.]
-
-
-_Note: You can get some of this information from executing `substance-ide --version` and `spm --version` at the command line. Also, please include the OS and what version of the OS you're running._
+OS: [What operating system do you use?]  
+Architecture: [What is the device's architecture? (For example: x86, ARMv8, amd64, etc.]  
+OS Version: [What is the version of your operating system? (For example: 17.04, 10, Sierra)]
+IDE Version: [Run `substance-ide --version` from a terminal to find this]  
+SPM Version: [Run `spm --version` from a terminal to find this]
