@@ -53,12 +53,31 @@ if [ $EXPECT_OUTPUT ]; then
 fi
 
 if [ $OS == 'Mac' ]; then
+  if [ -L "$0" ]; then
+    SCRIPT="$(readlink "$0")"
+  else
+    SCRIPT="$0"
+  fi
+  ATOM_APP="$(dirname "$(dirname "$(dirname "$(dirname "$SCRIPT")")")")"
+  if [ "$ATOM_APP" == . ]; then
+    unset ATOM_APP
+  else
+    ATOM_PATH="$(dirname "$ATOM_APP")"
+    ATOM_APP_NAME="$(basename "$ATOM_APP")"
+  fi
+
   if [ -n "$BETA_VERSION" ]; then
+<<<<<<< HEAD:substance-ide.sh
     ATOM_APP_NAME="Substance IDE Beta.app"
     ATOM_EXECUTABLE_NAME="Substance IDE Beta"
   else
     ATOM_APP_NAME="Substance IDE.app"
     ATOM_EXECUTABLE_NAME="Substance IDE"
+=======
+    ATOM_EXECUTABLE_NAME="Atom Beta"
+  else
+    ATOM_EXECUTABLE_NAME="Atom"
+>>>>>>> 2958ad2b188347c16bb0f00dc6a4d65b4512f93a:atom.sh
   fi
 
   if [ -z "${ATOM_PATH}" ]; then

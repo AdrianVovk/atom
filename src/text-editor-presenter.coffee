@@ -451,7 +451,7 @@ class TextEditorPresenter
     for decoration in @model.getOverlayDecorations()
       continue unless decoration.getMarker().isValid()
 
-      {item, position, class: klass} = decoration.getProperties()
+      {item, position, class: klass, avoidOverflow} = decoration.getProperties()
       if position is 'tail'
         screenPosition = decoration.getMarker().getTailScreenPosition()
       else
@@ -466,15 +466,16 @@ class TextEditorPresenter
       if overlayDimensions = @overlayDimensions[decoration.id]
         {itemWidth, itemHeight, contentMargin} = overlayDimensions
 
-        rightDiff = left + itemWidth + contentMargin - @windowWidth
-        left -= rightDiff if rightDiff > 0
+        if avoidOverflow isnt false
+          rightDiff = left + itemWidth + contentMargin - @windowWidth
+          left -= rightDiff if rightDiff > 0
 
-        leftDiff = left + contentMargin
-        left -= leftDiff if leftDiff < 0
+          leftDiff = left + contentMargin
+          left -= leftDiff if leftDiff < 0
 
-        if top + itemHeight > @windowHeight and
-           top - (itemHeight + @lineHeight) >= 0
-          top -= itemHeight + @lineHeight
+          if top + itemHeight > @windowHeight and
+             top - (itemHeight + @lineHeight) >= 0
+            top -= itemHeight + @lineHeight
 
       pixelPosition.top = top
       pixelPosition.left = left
@@ -596,7 +597,8 @@ class TextEditorPresenter
       line = @linesByScreenRow.get(screenRow)
       continue unless line?
       lineId = line.id
-      {bufferRow, softWrappedAtStart: softWrapped} = @displayLayer.softWrapDescriptorForScreenRow(screenRow)
+      {row: bufferRow, column: bufferColumn} = @displayLayer.translateScreenPosition(Point(screenRow, 0))
+      softWrapped = bufferColumn isnt 0
       foldable = not softWrapped and @model.isFoldableAtBufferRow(bufferRow)
       decorationClasses = @lineNumberDecorationClassesForRow(screenRow)
       blockDecorationsBeforeCurrentScreenRowHeight = @lineTopIndex.pixelPositionAfterBlocksForRow(screenRow) - @lineTopIndex.pixelPositionBeforeBlocksForRow(screenRow)
@@ -1001,8 +1003,7 @@ class TextEditorPresenter
     @lineHeight? and @baseCharacterWidth?
 
   pixelPositionForScreenPosition: (screenPosition) ->
-    position =
-      @linesYardstick.pixelPositionForScreenPosition(screenPosition)
+    position = @linesYardstick.pixelPositionForScreenPosition(screenPosition)
     position.top -= @getScrollTop()
     position.left -= @getScrollLeft()
 
@@ -1140,7 +1141,9 @@ class TextEditorPresenter
       @lineNumberDecorationsByScreenRow[screenRow] ?= {}
       @lineNumberDecorationsByScreenRow[screenRow][decorationId] = properties
     else
-      for row in [screenRange.start.row..screenRange.end.row] by 1
+      startRow = Math.max(screenRange.start.row, @getStartTileRow())
+      endRow = Math.min(screenRange.end.row, @getEndTileRow() + @tileSize)
+      for row in [startRow..endRow] by 1
         continue if properties.onlyHead and row isnt headScreenPosition.row
         continue if omitLastRow and row is screenRange.end.row
 
@@ -1225,13 +1228,14 @@ class TextEditorPresenter
       screenRange.end.column = 0
 
   repositionRegionWithinTile: (region, tileStartRow) ->
-    region.top  += @scrollTop - @lineTopIndex.pixelPositionBeforeBlocksForRow(tileStartRow)
-    region.left += @scrollLeft
+    region.top += @scrollTop - @lineTopIndex.pixelPositionBeforeBlocksForRow(tileStartRow)
 
   buildHighlightRegions: (screenRange) ->
     lineHeightInPixels = @lineHeight
     startPixelPosition = @pixelPositionForScreenPosition(screenRange.start)
     endPixelPosition = @pixelPositionForScreenPosition(screenRange.end)
+    startPixelPosition.left += @scrollLeft
+    endPixelPosition.left += @scrollLeft
     spannedRows = screenRange.end.row - screenRange.start.row + 1
 
     regions = []
