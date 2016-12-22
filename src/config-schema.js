@@ -11,11 +11,7 @@ const configSchema = {
     properties: {
       ignoredNames: {
         type: 'array',
-<<<<<<< HEAD
-        default: [".git", ".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", "node_modules", "ide_build"],
-=======
-        default: ['.git', '.hg', '.svn', '.DS_Store', '._*', 'Thumbs.db', 'desktop.ini'],
->>>>>>> 2958ad2b188347c16bb0f00dc6a4d65b4512f93a
+        default: [".git", ".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", "node_modules", "ide_build", 'desktop.ini'],
         items: {
           type: 'string'
         },
