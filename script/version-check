@@ -11,8 +11,8 @@ test toolbar-icons-ide
 test project-manager-ide
 test language-kotlin-ide
 test git-support-ide
+test tree-view-autoresize-ide
 
-test tree-view-autoresize
 test pigments
 test minimap
 test minimap-find-and-replace
