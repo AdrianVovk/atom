@@ -396,6 +396,30 @@ describe('AtomApplication', function () {
         })
       }
     })
+
+    describe('when adding or removing project folders', function () {
+      it('stores the window state immediately', async function () {
+        const dirA = makeTempDir()
+        const dirB = makeTempDir()
+
+        const atomApplication = buildAtomApplication()
+        const window = atomApplication.launch(parseCommandLine([dirA, dirB]))
+        await focusWindow(window)
+        assert.deepEqual(await getTreeViewRootDirectories(window), [dirA, dirB])
+
+        await evalInWebContents(window.browserWindow.webContents, (sendBackToMainProcess) => {
+          atom.project.removePath(atom.project.getPaths()[0])
+          sendBackToMainProcess(null)
+        })
+        assert.deepEqual(await getTreeViewRootDirectories(window), [dirB])
+
+        // Window state should be saved when the project folder is removed
+        const atomApplication2 = buildAtomApplication()
+        const [window2] = atomApplication2.launch(parseCommandLine([]))
+        await focusWindow(window2)
+        assert.deepEqual(await getTreeViewRootDirectories(window2), [dirB])
+      })
+    })
   })
 
   describe('before quitting', function () {
