@@ -80,39 +80,6 @@ function handleStartupEventWithSquirrel () {
   return SquirrelUpdate.handleStartupEvent(app, squirrelCommand)
 }
 
-<<<<<<< HEAD
-function setupAtomHome ({setPortable}) {
-  if (process.env.ATOM_HOME) {
-    return
-  }
-
-  let atomHome = path.join(app.getPath('home'), '.substance-ide')
-  const AtomPortable = require('./atom-portable')
-
-  if (setPortable && !AtomPortable.isPortableInstall(process.platform, process.env.ATOM_HOME, atomHome)) {
-    try {
-      AtomPortable.setPortable(atomHome)
-    } catch (error) {
-      console.log(`Failed copying portable directory '${atomHome}' to '${AtomPortable.getPortableAtomHomePath()}'`)
-      console.log(`${error.message} ${error.stack}`)
-    }
-  }
-
-  if (AtomPortable.isPortableInstall(process.platform, process.env.ATOM_HOME, atomHome)) {
-    atomHome = AtomPortable.getPortableAtomHomePath()
-  }
-
-  try {
-    atomHome = fs.realpathSync(atomHome)
-  } catch (e) {
-    // Don't throw an error if atomHome doesn't exist.
-  }
-
-  process.env.ATOM_HOME = atomHome
-}
-
-=======
->>>>>>> 2958ad2b188347c16bb0f00dc6a4d65b4512f93a
 function setupCompileCache () {
   const CompileCache = require('../compile-cache')
   CompileCache.setAtomHomeDirectory(process.env.ATOM_HOME)
